@@ -1,0 +1,200 @@
+[
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 1000,
+    "method": "td0",
+    "rmse_mean": 0.11185680569773955,
+    "rmse_sd": 0.01940232710122059,
+    "completed_episodes_range": [
+      125,
+      145
+    ]
+  },
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 1000,
+    "method": "td08",
+    "rmse_mean": 0.08396137308244031,
+    "rmse_sd": 0.03371638796607766,
+    "completed_episodes_range": [
+      125,
+      145
+    ]
+  },
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 1000,
+    "method": "mc",
+    "rmse_mean": 0.09619099836481278,
+    "rmse_sd": 0.0496519861482884,
+    "completed_episodes_range": [
+      125,
+      145
+    ]
+  },
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 10000,
+    "method": "td0",
+    "rmse_mean": 0.033717246913043605,
+    "rmse_sd": 0.014836823238732016,
+    "completed_episodes_range": [
+      1236,
+      1368
+    ]
+  },
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 10000,
+    "method": "td08",
+    "rmse_mean": 0.04993335203540519,
+    "rmse_sd": 0.019986943027257842,
+    "completed_episodes_range": [
+      1236,
+      1368
+    ]
+  },
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 10000,
+    "method": "mc",
+    "rmse_mean": 0.033064577350002324,
+    "rmse_sd": 0.012022874481190708,
+    "completed_episodes_range": [
+      1236,
+      1368
+    ]
+  },
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 100000,
+    "method": "td0",
+    "rmse_mean": 0.03820517546058465,
+    "rmse_sd": 0.017926454782522628,
+    "completed_episodes_range": [
+      12874,
+      13165
+    ]
+  },
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 100000,
+    "method": "td08",
+    "rmse_mean": 0.05590611609612056,
+    "rmse_sd": 0.026775413211129577,
+    "completed_episodes_range": [
+      12874,
+      13165
+    ]
+  },
+  {
+    "environment": "FrozenLake-v1",
+    "transitions": 100000,
+    "method": "mc",
+    "rmse_mean": 0.009382080251378672,
+    "rmse_sd": 0.004459232914098859,
+    "completed_episodes_range": [
+      12874,
+      13165
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 1000,
+    "method": "td0",
+    "rmse_mean": 901.50107443118,
+    "rmse_sd": 3.3309618614275625,
+    "completed_episodes_range": [
+      0,
+      1
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 1000,
+    "method": "td08",
+    "rmse_mean": 837.8035887179642,
+    "rmse_sd": 10.005618978746645,
+    "completed_episodes_range": [
+      0,
+      1
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 1000,
+    "method": "mc",
+    "rmse_mean": 908.6925947803535,
+    "rmse_sd": 85.14700819292932,
+    "completed_episodes_range": [
+      0,
+      1
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 10000,
+    "method": "td0",
+    "rmse_mean": 732.4460886243174,
+    "rmse_sd": 8.823740036466871,
+    "completed_episodes_range": [
+      0,
+      4
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 10000,
+    "method": "td08",
+    "rmse_mean": 482.9654335519368,
+    "rmse_sd": 23.61058898819915,
+    "completed_episodes_range": [
+      0,
+      4
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 10000,
+    "method": "mc",
+    "rmse_mean": 480.02612166840527,
+    "rmse_sd": 380.04695182514206,
+    "completed_episodes_range": [
+      0,
+      4
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 100000,
+    "method": "td0",
+    "rmse_mean": 237.66145457812223,
+    "rmse_sd": 14.130311256999965,
+    "completed_episodes_range": [
+      7,
+      23
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 100000,
+    "method": "td08",
+    "rmse_mean": 118.23480386116437,
+    "rmse_sd": 26.93896646428157,
+    "completed_episodes_range": [
+      7,
+      23
+    ]
+  },
+  {
+    "environment": "CliffWalking-v1",
+    "transitions": 100000,
+    "method": "mc",
+    "rmse_mean": 43.463285293312616,
+    "rmse_sd": 14.710777101489194,
+    "completed_episodes_range": [
+      7,
+      23
+    ]
+  }
+]
