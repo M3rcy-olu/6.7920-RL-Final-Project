@@ -1,7 +1,8 @@
 # Tabular Q-learning baselines
 
-Supported: FrozenLake-v1 (default slippery 4x4), CliffWalking-v1 and fixed
-MiniGrid-Proj-KeyDoor-v0. No pixels, neural networks or parameterized models.
+Supported: FrozenLake-v1 (default slippery 4x4), CliffWalking-v1, fixed
+MiniGrid-Proj-KeyDoor-v0 and every chain-of-rooms world
+(`MiniGrid-Proj-Chain-*-v0`, see below). No pixels, neural networks or parameterized models.
 Random KeyDoor, GoToObj and MiniWorld are intentionally excluded.
 
 ## Organization
@@ -75,3 +76,31 @@ actions. Evaluation reports these as unseen_episodes and ends those rollouts.
 Perturbations must keep actions frozen and report coverage failures explicitly.
 Matching IDs do not certify matching layouts or transitions: these tables cover
 only the documented baseline settings, not arbitrary maps or unseen perturbations.
+
+## Chain-of-rooms worlds
+
+All 18 `MiniGrid-Proj-Chain-*-v0` ids (`mini_envs/chain_worlds.py`; list them
+with `python scripts/list_envs.py`) train with the same command, for example:
+
+```sh
+python -m q_learning --env MiniGrid-Proj-Chain-Base-v0 --episodes <N> --max-steps <limit> --seed 0 --output q_learning/policies/chain_base.json
+```
+
+- **Standard version:** the registered world as is, which pays reward after
+  every room (`feedback_every=1`). Train on that.
+- **State:** 6 ints read from the simulator: x, y, direction, carried key colour
+  index (-1 = none), frontier room, opened door of that room (-1 = none). The
+  world's "loss in the current gap" field is left out: with feedback after every
+  room it is fixed by (frontier, opened door), so training loses nothing (tested),
+  and the frozen policy can act unchanged in the same world under any feedback
+  setting, e.g. `gym.make(id, feedback_every=None)`.
+- **Step limit:** a cutoff bootstraps (D4), unlike KeyDoor, because time is not
+  part of these tasks. Pick `--max-steps` from the step-limit sweep
+  (`scripts/chain_step_limits.py`, results in the decision doc).
+- **Coverage:** after training, every reachable non-terminal state that was never
+  visited gets the tie-break action (lowest index), so the policy file covers
+  the whole state space and an epsilon-greedy version or exact DP is defined
+  everywhere. Rollouts never raise `KeyError` in these worlds.
+- **Success** in `evaluate` means reaching the end with the full return of 1.
+- The env skips building image observations (`obs` is `None`), because the
+  policy reads the Markov state; this makes training several times faster.

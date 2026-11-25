@@ -179,7 +179,15 @@ def test_fixed_keydoor_baseline_is_solvable():
         env.close()
 
 
-@pytest.mark.parametrize("env_id, expected", [("test", 0.5), ("MiniGrid-test", 0.0)])
+@pytest.mark.parametrize(
+    "env_id, expected",
+    [
+        ("test", 0.5),
+        # KeyDoor's horizon is part of the task; chain worlds bootstrap (D4).
+        ("MiniGrid-Proj-KeyDoor-v0", 0.0),
+        ("MiniGrid-Proj-Chain-Base-v0", 0.5),
+    ],
+)
 def test_truncation_bootstrap_depends_on_task(monkeypatch, env_id, expected):
     import gymnasium as gym
 

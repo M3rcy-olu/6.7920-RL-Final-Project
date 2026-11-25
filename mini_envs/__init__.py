@@ -25,6 +25,11 @@ CUSTOM_ENVS = {
     "MiniWorld-Proj-GoToObj-v0": ("mini_envs.miniworld_envs:GoToObjectWorldEnv", {}),
 }
 
+from mini_envs.chain_worlds import CHAIN_WORLDS, COST_WORLDS  # noqa: E402
+
+for _env_id, _spec in {**CHAIN_WORLDS, **COST_WORLDS}.items():
+    CUSTOM_ENVS[_env_id] = ("mini_envs.chain_rooms:ChainRoomsEnv", _spec["kwargs"])
+
 for _env_id, (_entry_point, _kwargs) in CUSTOM_ENVS.items():
     if _env_id not in registry:
         register(id=_env_id, entry_point=_entry_point, kwargs=_kwargs)
