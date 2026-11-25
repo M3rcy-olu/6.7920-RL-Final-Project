@@ -1,0 +1,3 @@
+# Script outputs (frames, gifs, logs) stay local.
+*
+!.gitignore
