@@ -27,7 +27,7 @@ def random_policy_values(env_id: str, gamma: float, **make_kwargs) -> np.ndarray
     return v
 
 
-@pytest.mark.parametrize("update_rule", ["true_online", "offline"])
+@pytest.mark.parametrize("update_rule", ["accumulating", "true_online", "offline"])
 @pytest.mark.parametrize("lam", [0.0, 1.0])
 def test_predict_mode_recovers_exact_random_policy_values_on_frozenlake(lam, update_rule):
     gamma = 0.9

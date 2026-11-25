@@ -29,7 +29,7 @@ def run(
     seed: int,
     max_steps: int,
     epsilon: float = 0.1,
-    update_rule: str = "true_online",
+    update_rule: str = "accumulating",
 ) -> dict:
     """Train for ``episodes`` episodes and return the results.
 
@@ -37,7 +37,7 @@ def run(
         mode: "predict" (learn V of the uniform-random policy; the fixed
             policy is pending D2) or "control" (SARSA(lambda), epsilon-greedy).
         epsilon: Exploration rate, control mode only.
-        update_rule: "true_online" (default) or "offline" (D3, under discussion).
+        update_rule: "accumulating" (default), "true_online" (backup) or "offline" (D3).
     """
     if mode not in ("predict", "control"):
         raise ValueError("mode must be 'predict' or 'control'")

@@ -4,11 +4,14 @@ One learner, linear in state features φ(s), for λ from 0 (TD(0)) to 1 (Monte C
 implements the decisions in the experiment-design doc: D4 bootstrap at the step-limit cutoff, D6 α
 split across active features, D8 separate seeds per randomness source.
 
-Two update rules (D3, under discussion), chosen with `update_rule=` / `--update`:
+Three update rules (D3), chosen with `update_rule=` / `--update`:
 
-- `true_online` (default): true online TD(λ) / Sarsa(λ) with dutch traces. Updates every step.
-  λ=0 is classic online TD(0); λ=1 ends a terminated episode with exactly the Monte Carlo weights.
-  Both equivalences are unit-tested in `tests/test_true_online.py`.
+- `accumulating` (default): conventional online TD(λ) / Sarsa(λ) with accumulating traces, the
+  same rule at every λ. λ=0 is classic online TD(0); λ=1 is TD(1), which equals Monte Carlo only
+  when no state repeats in an episode. Tested in `tests/test_accumulating.py`.
+- `true_online` (backup): true online TD(λ) / Sarsa(λ) with dutch traces. λ=0 is classic online
+  TD(0); λ=1 ends a terminated episode with exactly the Monte Carlo weights. Tested in
+  `tests/test_true_online.py`.
 - `offline`: the offline λ-return. Updates only at episode end, from start-of-episode values.
 
 | file | what it does |
@@ -28,8 +31,10 @@ Features φ can be an int or an int array (indices of active binary features: on
 coding) or a dense float array. Tabular learning is φ = one-hot.
 
 Predict mode evaluates the uniform-random policy until the fixed policy is chosen (D2).
-`tests/test_runner.py` checks predict mode, under both update rules, against exact
+`tests/test_runner.py` checks predict mode, under all three update rules, against exact
 dynamic-programming values on FrozenLake.
+
+Scope (D9): Miniworld is out of the study, so no neural networks; Minigrid uses tabular features.
 
 Check `truncation_fraction` in every result (D4). On CliffWalking control with a 100-step limit
 (300 episodes, 3 seeds, α=0.1), `offline` truncated 34–50% of episodes for λ<1 and 99.8% at λ=1;

@@ -32,8 +32,8 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--env", required=True)
     p.add_argument("--mode", choices=["predict", "control"], required=True)
-    p.add_argument("--update", choices=["true_online", "offline"], default="true_online",
-                   help="update rule (D3, under discussion)")
+    p.add_argument("--update", choices=["accumulating", "true_online", "offline"], default="accumulating",
+                   help="update rule (D3): accumulating (default), true_online (backup), offline")
     p.add_argument("--lam", type=float, nargs="+", default=[0.0, 0.5, 0.9, 1.0])
     p.add_argument("--alpha", type=float, nargs="+", default=[0.1])
     p.add_argument("--gamma", type=float, default=0.99)

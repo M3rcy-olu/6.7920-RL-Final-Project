@@ -11,17 +11,21 @@ Feature formats accepted everywhere a feature vector is expected:
   features, so ``alpha`` means the same thing for any number of tilings (D6).
 * a float array of length ``n_features``: a dense vector (plain gradient step).
 
-Two update rules (D3, under discussion):
+Three update rules (D3):
 
-* ``"true_online"`` (default): true online TD(lambda) / Sarsa(lambda) with
+* ``"accumulating"`` (default): conventional online TD(lambda) / Sarsa(lambda)
+  with accumulating eligibility traces (Sutton & Barto 2018, sections 12.2 and
+  12.7). The same rule at every lambda: lam = 0 is classic online TD(0), lam = 1
+  is TD(1), which equals Monte Carlo only when no state repeats in an episode.
+* ``"true_online"`` (backup): true online TD(lambda) / Sarsa(lambda) with
   dutch traces (van Seijen & Sutton 2014; Sutton & Barto 2018, sections 12.5
-  and 12.7). Weights change after every step. lam = 0 is classic online TD(0);
-  lam = 1 ends a terminated episode with exactly the Monte Carlo weights.
+  and 12.7). lam = 0 is classic online TD(0); lam = 1 ends a terminated
+  episode with exactly the Monte Carlo weights.
 * ``"offline"``: the offline lambda-return. Nothing changes during the
   episode; at its end, targets come from the start-of-episode weights and each
   step t = 0..T-1 moves toward its target in time order.
 
-Either way the final state's value is used only when the episode was
+In every rule the final state's value is used only when the episode was
 truncated by the step limit (D4).
 
 Per-step use (what the runner does)::
@@ -40,7 +44,7 @@ import numpy as np
 
 from td.lambda_return import lambda_returns
 
-UPDATE_RULES = ("true_online", "offline")
+UPDATE_RULES = ("accumulating", "true_online", "offline")
 
 
 @dataclass
@@ -81,7 +85,7 @@ class LinearTD:
         alpha: Step size (per active feature for binary features).
         gamma: Discount factor.
         lam: Lambda in [0, 1]; 0 = TD(0), 1 = Monte Carlo.
-        update_rule: "true_online" (default) or "offline".
+        update_rule: "accumulating" (default), "true_online" (backup) or "offline".
     """
 
     def __init__(
@@ -92,7 +96,7 @@ class LinearTD:
         gamma: float,
         lam: float,
         n_actions: int | None = None,
-        update_rule: str = "true_online",
+        update_rule: str = "accumulating",
     ):
         if not 0 < alpha or not 0 <= gamma <= 1 or not 0 <= lam <= 1:
             raise ValueError("need alpha > 0, gamma in [0, 1], lam in [0, 1]")
@@ -195,17 +199,23 @@ class LinearTD:
                 )
             return
 
-        # True online TD(lambda), Sutton & Barto (2018) section 12.5 (Sarsa: 12.7).
         ep, w = self._ep, self.weights.reshape(-1)
         x, a, z = ep["x"], ep["alpha"], ep["z"]
         x_next = np.zeros_like(x) if terminated else self._flat_features(phi_next, action_next)
         v, v_next = w @ x, w @ x_next
         delta = reward + self.gamma * v_next - v
         gl = self.gamma * self.lam
-        zx = z @ x  # uses the trace before decay: z <- gl*z + (1 - a*gl*z.x) x
-        z *= gl
-        z += (1.0 - a * gl * zx) * x
-        w += a * (delta + v - ep["v_old"]) * z - a * (v - ep["v_old"]) * x
+        if self.update_rule == "accumulating":
+            # Semi-gradient TD(lambda) / Sarsa(lambda), Sutton & Barto (2018) 12.2 and 12.7.
+            z *= gl
+            z += x
+            w += a * delta * z
+        else:
+            # True online TD(lambda), Sutton & Barto (2018) section 12.5 (Sarsa: 12.7).
+            zx = z @ x  # uses the trace before decay: z <- gl*z + (1 - a*gl*z.x) x
+            z *= gl
+            z += (1.0 - a * gl * zx) * x
+            w += a * (delta + v - ep["v_old"]) * z - a * (v - ep["v_old"]) * x
         ep["v_old"], ep["x"] = v_next, x_next
         if not terminated:
             ep["alpha"] = self._step_size(phi_next)
