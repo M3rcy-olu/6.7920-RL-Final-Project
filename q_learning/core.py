@@ -27,7 +27,7 @@ class Policy:
             self.env_id.startswith("MiniGrid")
             and env.unwrapped.max_steps != self.max_steps
         ):
-            raise ValueError("KeyDoor policy requires its training horizon")
+            raise ValueError("MiniGrid policy requires its training horizon")
         action = self.actions[state(obs, env)]
         if not env.action_space.contains(action):
             raise ValueError("Policy contains an invalid action")
@@ -50,10 +50,20 @@ class Policy:
         env_id, max_steps = data["env_id"], data["max_steps"]
         if env_id not in ENVS or type(max_steps) is not int or max_steps < 1:
             raise ValueError("Invalid policy environment or horizon")
+        goto = env_id == "MiniGrid-Proj-GoToObj-v0"
         width = 9 if env_id.startswith("MiniGrid") else 1
-        n_actions = 7 if width == 9 else 4
+        n_actions = 3 if goto else (7 if width == 9 else 4)
         actions = {}
         for s, action in data["actions"]:
+            if goto:
+                if (
+                    len(s) < 10
+                    or any(type(v) is not int for v in s)
+                    or s[0] < 3
+                    or s[1] < 3
+                ):
+                    raise ValueError("Invalid GoToObject grid dimensions")
+                width = 10 + 3 * s[0] * s[1]
             if (
                 len(s) != width
                 or any(type(v) is not int for v in s)

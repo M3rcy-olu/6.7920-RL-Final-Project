@@ -2,12 +2,13 @@
 
 Supported: FrozenLake-v1 (default slippery 4x4), CliffWalking-v1 and fixed
 MiniGrid-Proj-KeyDoor-v0. No pixels, neural networks or parameterized models.
-Random KeyDoor, GoToObj and MiniWorld are intentionally excluded.
+GoToObject has encoder and policy support, but no validated learned policy.
+Random KeyDoor and MiniWorld are intentionally excluded.
 
 ## Organization
 
 - `gym_envs/adapters.py`: Gym construction and integer state encoding.
-- `mini_envs/adapters.py`: fixed KeyDoor construction and symbolic state encoding.
+- `mini_envs/adapters.py`: MiniGrid construction and full symbolic state encoding.
 - `td/`: existing value estimation, unchanged.
 - `q_learning/`: shared training, policy serialization and frozen evaluation.
 - `q_learning/policies/`: learned action tables in one versioned JSON format.
@@ -75,3 +76,21 @@ actions. Evaluation reports these as unseen_episodes and ends those rollouts.
 Perturbations must keep actions frozen and report coverage failures explicitly.
 Matching IDs do not certify matching layouts or transitions: these tables cover
 only the documented baseline settings, not arbitrary maps or unseen perturbations.
+
+## GoToObject encoder
+
+`MiniGrid-Proj-GoToObj-v0` supports the default movement-only actions (left,
+right, forward). Its integer tuple is width, height, agent x/y, direction,
+step count, target x/y, target color/type indices, then the complete grid's
+object/color/state triples flattened in NumPy C order from `grid.encode()`.
+The header has 10 integers; the grid adds `3 * width * height` integers.
+This is privileged full symbolic state, not the agent's partial image.
+Target fields distinguish missions on the same layout. Walls and all objects
+are included so randomized layouts do not alias. Time is included because
+terminal rewards depend on elapsed steps. Non-movement action sets are rejected.
+
+The shared CLI can train this task with `--env MiniGrid-Proj-GoToObj-v0`,
+but this PR supplies no trained GoToObject artifact or success claim. With
+randomized layouts and targets, a full-state table may have poor coverage.
+An encoder passing correctness tests does not establish learnability at a
+practical episode budget. Exact DP and TD feature integration remain separate.
