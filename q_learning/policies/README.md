@@ -54,8 +54,13 @@ Shared selection rule:
   policies can be reused under changed feedback. No feedback experiments
   are run here.
 
-Reproduce all runs: `python scripts/train_chain_baselines.py` from the repo
-root. This overwrites the chain artifacts. Re-check one artifact with
+Use the existing CLI for training, for example Base (optimal path 56):
+
+```sh
+python -m q_learning --env MiniGrid-Proj-Chain-Base-v0 --episodes 2000 --max-steps 2800 --seed 0 --alpha 0.2 --gamma 0.99 --initial-value 0 --output q_learning/policies/chain_base.json
+```
+
+Apply the shared selection rule above to each world. Re-check one artifact with
 `python -m q_learning --load q_learning/policies/chain_base.json`.
 `chain_results.json` records each attempt and its elapsed training seconds
 (excluding evaluation and serialization). Times are machine/load dependent.
