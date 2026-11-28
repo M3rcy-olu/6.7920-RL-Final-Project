@@ -85,3 +85,32 @@ def test_traces_reset_between_episodes():
     learner.update(Episode(features=[0, 1], rewards=[0.0], terminated=True))
     learner.update(Episode(features=[2, 1], rewards=[1.0], terminated=True))
     assert learner.value(0) == 0.0  # state 0's trace did not carry into episode 2
+
+
+@pytest.mark.parametrize("lam", [0.0, 0.7, 1.0])
+@pytest.mark.parametrize("multi_index", [False, True])
+def test_index_features_match_dense_one_hot_features_in_control(lam, multi_index):
+    # Index (binary) features take a fast path; it must give the same weights as
+    # passing the same features as dense vectors.
+    rng = np.random.default_rng(1)
+    n, n_actions = 6, 3
+    sparse = LinearTD(n, alpha=0.2, gamma=GAMMA, lam=lam, n_actions=n_actions)
+    # Index features divide alpha by the number of active features (2 here).
+    dense = LinearTD(n, alpha=0.1 if multi_index else 0.2, gamma=GAMMA, lam=lam, n_actions=n_actions)
+
+    def feats():
+        idx = rng.choice(n, size=2, replace=False) if multi_index else np.array([rng.integers(n)])
+        vec = np.zeros(n)
+        vec[idx] = 1.0
+        return idx, vec
+
+    for _ in range(5):
+        (i0, v0), a0 = feats(), int(rng.integers(n_actions))
+        sparse.begin_episode(i0, a0)
+        dense.begin_episode(v0, a0)
+        for t in range(12):
+            (i1, v1), a1, r = feats(), int(rng.integers(n_actions)), float(rng.normal())
+            term, trunc = t == 11 and lam != 0.7, t == 11 and lam == 0.7
+            sparse.observe(r, i1, a1, terminated=term, truncated=trunc)
+            dense.observe(r, v1, a1, terminated=term, truncated=trunc)
+    np.testing.assert_allclose(sparse.weights, dense.weights, atol=1e-12)

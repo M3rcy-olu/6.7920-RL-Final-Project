@@ -150,6 +150,35 @@ class LinearTD:
             block += np.asarray(phi, dtype=float)
         return x
 
+    def _flat_index(self, phi, action) -> np.ndarray:
+        """Indices of the active entries of x(s, a) in the flattened weights."""
+        offset = 0 if self.n_actions is None else action * self.n_features
+        return np.atleast_1d(np.asarray(phi, dtype=np.int64)) + offset
+
+    def _observe_index(self, reward, phi_next, action_next, terminated, done) -> None:
+        """Accumulating-trace update for index features (equals the dense branch)."""
+        ep, w = self._ep, self.weights.reshape(-1)
+        idx, a, z, tmp = ep["idx"], ep["alpha"], ep["z"], ep["tmp"]
+        v = w[idx].sum()
+        if terminated:
+            v_next, idx_next = 0.0, None
+        else:
+            idx_next = self._flat_index(phi_next, action_next)
+            v_next = w[idx_next].sum()
+        delta = reward + self.gamma * v_next - v
+        z *= self.gamma * self.lam
+        if idx.size == 1:
+            z[idx[0]] += 1.0
+        else:
+            np.add.at(z, idx, 1.0)
+        np.multiply(z, a * delta, out=tmp)
+        w += tmp
+        ep["idx"] = idx_next
+        if not terminated:
+            ep["alpha"] = self._step_size(phi_next)
+        if done:
+            self._ep = None
+
     def _check_action(self, action) -> None:
         if self.n_actions is not None and action is None:
             raise ValueError("control mode needs actions")
@@ -159,6 +188,14 @@ class LinearTD:
         self._check_action(action)
         if self.update_rule == "offline":
             self._ep = dict(features=[phi], actions=[action], rewards=[])
+        elif self.update_rule == "accumulating" and _is_binary(phi):
+            # Fast path for index features: same maths, without building dense x.
+            self._ep = dict(
+                idx=self._flat_index(phi, action),
+                alpha=self._step_size(phi),
+                z=np.zeros(self.weights.size),
+                tmp=np.empty(self.weights.size),
+            )
         else:
             self._ep = dict(
                 x=self._flat_features(phi, action),
@@ -197,6 +234,10 @@ class LinearTD:
                         actions=ep["actions"] if self.n_actions is not None else None,
                     )
                 )
+            return
+
+        if "idx" in self._ep:
+            self._observe_index(reward, phi_next, action_next, terminated, done)
             return
 
         ep, w = self._ep, self.weights.reshape(-1)

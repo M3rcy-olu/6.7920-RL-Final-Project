@@ -10,7 +10,13 @@ import numpy as np
 
 from td.policies import epsilon_greedy
 
-from .adapters import ENVS, make_env, state
+from .adapters import CHAIN_ENVS, ENVS, KEY_DOOR, live_states, make_env, spec, state
+
+
+def truncation_is_terminal(env_id):
+    """True only where the step limit is part of the task (KeyDoor keeps time in
+    its state and its reward depends on it). Elsewhere a cutoff bootstraps (D4)."""
+    return env_id == KEY_DOOR
 
 
 @dataclass
@@ -24,7 +30,7 @@ class Policy:
         if env.spec.id != self.env_id:
             raise ValueError("Policy and environment do not match")
         if (
-            self.env_id.startswith("MiniGrid")
+            truncation_is_terminal(self.env_id)
             and env.unwrapped.max_steps != self.max_steps
         ):
             raise ValueError("KeyDoor policy requires its training horizon")
@@ -50,8 +56,7 @@ class Policy:
         env_id, max_steps = data["env_id"], data["max_steps"]
         if env_id not in ENVS or type(max_steps) is not int or max_steps < 1:
             raise ValueError("Invalid policy environment or horizon")
-        width = 9 if env_id.startswith("MiniGrid") else 1
-        n_actions = 7 if width == 9 else 4
+        width, n_actions = spec(env_id)
         actions = {}
         for s, action in data["actions"]:
             if (
@@ -104,8 +109,8 @@ def train(
                 action = epsilon_greedy(values(s), epsilon, rng)
                 obs, reward, terminated, truncated, _ = env.step(action)
                 next_s = state(obs, env)
-                # MiniGrid is a finite-horizon task with time in its state.
-                finite_end = truncated and env_id.startswith("MiniGrid")
+                # KeyDoor is a finite-horizon task with time in its state.
+                finite_end = truncated and truncation_is_terminal(env_id)
                 target = reward
                 if not terminated and not finite_end:
                     target += gamma * values(next_s).max()
@@ -119,6 +124,10 @@ def train(
                     f"Episodes {episode + 1}: goal rewards={successes}, states={len(q)}",
                     flush=True,
                 )
+        # Chain worlds: give unvisited states the tie-break action, so the frozen
+        # epsilon-greedy policy and exact DP are defined on every state.
+        for s in live_states(env_id, env):
+            values(s)
         return Policy(env_id, max_steps, {s: int(np.argmax(v)) for s, v in q.items()})
     finally:
         env.close()
@@ -147,7 +156,12 @@ def evaluate(policy, *, episodes=100, seed=100000):
                 if terminated or truncated:
                     successes += int(
                         terminated
-                        and (policy.env_id == "CliffWalking-v1" or reward > 0)
+                        and (
+                            policy.env_id == "CliffWalking-v1"
+                            # chain worlds: success = the full return of 1
+                            or (policy.env_id in CHAIN_ENVS and total > 1 - 1e-9)
+                            or (policy.env_id not in CHAIN_ENVS and reward > 0)
+                        )
                     )
                     break
             returns.append(total)

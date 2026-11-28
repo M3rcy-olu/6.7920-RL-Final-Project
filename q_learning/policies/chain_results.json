@@ -1,0 +1,312 @@
+[
+  {
+    "world": "Delay-L1",
+    "env_id": "MiniGrid-Proj-Chain-Delay-L1-v0",
+    "optimal_steps": 44,
+    "max_steps": 2200,
+    "file": "q_learning/policies/chain_delay_l1.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 12.289568252002937,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 44.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Base",
+    "env_id": "MiniGrid-Proj-Chain-Base-v0",
+    "optimal_steps": 56,
+    "max_steps": 2800,
+    "file": "q_learning/policies/chain_base.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 15.181683939998038,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 56.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Delay-L8",
+    "env_id": "MiniGrid-Proj-Chain-Delay-L8-v0",
+    "optimal_steps": 72,
+    "max_steps": 3600,
+    "file": "q_learning/policies/chain_delay_l8.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 18.890708949998952,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 72.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Delay-L16",
+    "env_id": "MiniGrid-Proj-Chain-Delay-L16-v0",
+    "optimal_steps": 104,
+    "max_steps": 5200,
+    "file": "q_learning/policies/chain_delay_l16.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 30.52771349500108,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 104.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Doors-3",
+    "env_id": "MiniGrid-Proj-Chain-Doors-3-v0",
+    "optimal_steps": 76,
+    "max_steps": 3800,
+    "file": "q_learning/policies/chain_doors_3.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 19.968137578995083,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 76.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Doors-4",
+    "env_id": "MiniGrid-Proj-Chain-Doors-4-v0",
+    "optimal_steps": 89,
+    "max_steps": 4450,
+    "file": "q_learning/policies/chain_doors_4.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 34.87350620799407,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 89.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Rooms-2",
+    "env_id": "MiniGrid-Proj-Chain-Rooms-2-v0",
+    "optimal_steps": 36,
+    "max_steps": 1800,
+    "file": "q_learning/policies/chain_rooms_2.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 8.979274195997277,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 36.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Rooms-6",
+    "env_id": "MiniGrid-Proj-Chain-Rooms-6-v0",
+    "optimal_steps": 106,
+    "max_steps": 5300,
+    "file": "q_learning/policies/chain_rooms_6.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 26.773014047008473,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 0.9999999999999999,
+        "mean_steps": 106.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Rooms-8",
+    "env_id": "MiniGrid-Proj-Chain-Rooms-8-v0",
+    "optimal_steps": 130,
+    "max_steps": 6500,
+    "file": "q_learning/policies/chain_rooms_8.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 36.34402217400202,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 132.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Size-7",
+    "env_id": "MiniGrid-Proj-Chain-Size-7-v0",
+    "optimal_steps": 65,
+    "max_steps": 3250,
+    "file": "q_learning/policies/chain_size_7.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 21.570135394998943,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 65.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Hard",
+    "env_id": "MiniGrid-Proj-Chain-Hard-v0",
+    "optimal_steps": 144,
+    "max_steps": 7200,
+    "file": "q_learning/policies/chain_hard.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 64.98318818100961,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 0.9999999999999999,
+        "mean_steps": 150.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Cost-Graded",
+    "env_id": "MiniGrid-Proj-Chain-Cost-Graded-v0",
+    "optimal_steps": 56,
+    "max_steps": 2800,
+    "file": "q_learning/policies/chain_cost_graded.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 14.971876837007585,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 56.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Cost-Graded-Rev",
+    "env_id": "MiniGrid-Proj-Chain-Cost-Graded-Rev-v0",
+    "optimal_steps": 56,
+    "max_steps": 2800,
+    "file": "q_learning/policies/chain_cost_graded_rev.json",
+    "passed": true,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 15.233957791002467,
+        "passed": true,
+        "episodes": 100,
+        "mean_return": 1.0,
+        "mean_steps": 56.0,
+        "success_rate": 1.0,
+        "unseen_episodes": 0
+      }
+    ]
+  },
+  {
+    "world": "Cost-Graded-8",
+    "env_id": "MiniGrid-Proj-Chain-Cost-Graded-8-v0",
+    "optimal_steps": 148,
+    "max_steps": 7400,
+    "file": "q_learning/policies/chain_cost_graded_8.json",
+    "passed": false,
+    "attempts": [
+      {
+        "training_episodes": 2000,
+        "training_seconds": 32.98281871200015,
+        "passed": false,
+        "episodes": 100,
+        "mean_return": 0.8499999999999995,
+        "mean_steps": 120.0,
+        "success_rate": 0.0,
+        "unseen_episodes": 0
+      },
+      {
+        "training_episodes": 4000,
+        "training_seconds": 67.16574382199906,
+        "passed": false,
+        "episodes": 100,
+        "mean_return": 0.8687500000000005,
+        "mean_steps": 124.0,
+        "success_rate": 0.0,
+        "unseen_episodes": 0
+      },
+      {
+        "training_episodes": 8000,
+        "training_seconds": 134.42677467600151,
+        "passed": false,
+        "episodes": 100,
+        "mean_return": 0.95625,
+        "mean_steps": 136.0,
+        "success_rate": 0.0,
+        "unseen_episodes": 0
+      },
+      {
+        "training_episodes": 16000,
+        "training_seconds": 270.43814808200113,
+        "passed": false,
+        "episodes": 100,
+        "mean_return": 0.95625,
+        "mean_steps": 136.0,
+        "success_rate": 0.0,
+        "unseen_episodes": 0
+      }
+    ]
+  }
+]
